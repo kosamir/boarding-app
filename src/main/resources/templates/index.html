@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Boarding index</title>
+</head>
+<body>
+<!--  
+<script src="https://unpkg.com/microblink/dist/microblink.min.js" ></script>
+
+<script>
+    Microblink.SDK.SetRecognizers(['MRTD', 'CRO_ID_FRONT']);
+    Microblink.SDK.SetAuthorization('Bearer OGVlYTdiZTA2ZGVhNDcyYmI1ODE2ZTdiY2JjZGQ1Njc6NThjZjYwYWYtZTUzNy00Mzc2LTg0MjctOWJjODg2YzRlNmVm');
+</script>
+
+<style type="text/css" >
+  .microblink-ui-component-wrapper {
+    max-width: 901px;
+    height: 545px;
+    position: relative;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  microblink-ui-web {
+    --mb-widget-font-family: "Avenir Next";
+    --mb-widget-border-width: 4px;
+    --mb-widget-border-color: black;
+    --mb-default-font-color: #48b2e8;
+    --mb-btn-font-color: white;
+    --mb-btn-background-color: #48b2e8;
+    --mb-btn-background-color-hover: #26a4e4;
+    --mb-btn-flip-image-color: #48b2e8;
+    --mb-json-color-key: black;
+    --mb-json-color-string: #48b2e8;
+    --mb-json-color-boolean: black;
+    --mb-json-color-number: black;
+  }
+</style>
+
+<div class="microblink-ui-component-wrapper">
+    <microblink-ui-web tabs autoscroll>
+        <img slot="loader-image" src="https://microblink.com/bundles/microblinkmicroblink/images/loading-animation-on-blue.gif" />
+    </microblink-ui-web>
+</div>
+-->
+<div>Naziv predloska</div>
+<div th:text="${template}"></div>
+<div>Broj Koraka</div>
+<div th:text="${numForms}"></div>
+<div>Id forme</div>
+<div th:text="${formId}"></div>
+<div>Id sljedece forme</div>
+<div th:text="${nextFormId}"></div>
+<div>Broj odradjenih koraka</div>
+<div th:text="${completedSteps}"></div>
+<div th:if="${form != null}">
+	<div th:replace="fragments/form">...</div>
+</div>
+<div>Završeno</div>
+<div th:text="${over}"></div>
+
+<div th:if="${!over}">
+<a th:href="@{'/'+${template}+'/'+ ${templateId}+'/'+ ${nextFormId} + '/'+${numForms}+'/'+${completedSteps}}" th:text="${completedSteps==0?'Zapocni':'Sljedeca'}">Započni</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/js/form.js"></script> 
+</head>
+<body>
+
+	<form id="genericForm" th:action="@{${link}}" th:object="${form}" method="post">
+		<div th:text="${form.name}"></div>
+		<input name="templateId" type="hidden" th:value="${templateId}" /> <input
+			name="formId" type="hidden" th:value="${formId}" />
+		<th:block th:each="field : ${form.fields}">
+
+			<div th:text="${field.label}"></div>
+			<!-- 	<div th:text="${field.type}"></div> -->
+			<th:block th:switch="${field.type}">
+				<div th:case="'SHORT_TEXT_FIELD'">
+					<!-- print object is not active -->
+					<input type="text" th:id="${field.id}" />
+				</div>
+				<div th:case="'LONG_TEXT_FIELD'">
+					<textarea rows="3" cols="5" id="${field.id}"></textarea>
+				</div>
+				<div th:case="'DATE'">
+					<input type="date" th:id="${field.id}">
+					<!-- print object is new and active -->
+				</div>
+				<div th:case="'CHOICE'">
+					<select th:id="${field.id}">
+						<div th:if="${field.value != null}">
+							<th:block th:each="item : ${#strings.arraySplit(field.value, ',')}">
+								<option th:value="${item}" th:text="${item}"></option>
+								
+							</th:block>
+						</div>
+					</select>
+				</div>
+				<div th:case="'MULTIPLE_CHOICE'">
+					<!-- print object is new and active -->
+					<select multiple="multiple" th:id="${field.id}">
+						<div th:if="${field.value != null}">
+							<!-- todo -->
+						</div>
+
+					</select>
+				</div>
+				<div th:case="'CHECKBOX'">
+					<input type="checkbox" th:id="${field.id}">
+				</div>
+				<div th:case="'NUMBER'">
+					<input type="number" th:id="${field.id}">
+				</div>
+			</th:block>
+		</th:block>
+		
+		<input type="submit" value="Submit">
+
+	</form>
+	<form id="uploadForm" enctype="multipart/form-data" th:action="@{/candidate/recognize}" action="">
+			<input name="file" type="file" /> <input type="button"
+				value="Upload" />
+		</form>
+		<progress></progress>
+</body>
+
+</html>
