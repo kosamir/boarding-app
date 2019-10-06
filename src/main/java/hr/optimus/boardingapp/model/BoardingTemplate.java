@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -32,19 +34,20 @@ public class BoardingTemplate {
 
 	@OneToMany(fetch = FetchType.EAGER, 
 			cascade = { CascadeType.ALL}
-			, mappedBy = "template"
 			, orphanRemoval = true
+			, mappedBy = "template"
 			)
 	private List<Form> forms = new ArrayList<Form>();
 	
 	public void addForm(Form f) {
-		this.forms.add(f);
 		f.setTemplate(this);
+		this.forms.add(f);
 	}
 	
-	public void removeForm(Form f) {
-		this.forms.remove(f);
-		f.setTemplate(null);
+	public void removeForm(Form form) {
+		form.getFields().clear();
+		form.setTemplate(null);
+		this.forms.remove(form);
 		
 	}
 }

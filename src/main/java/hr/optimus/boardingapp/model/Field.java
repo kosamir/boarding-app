@@ -12,8 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import hr.optimus.boardingapp.model.enums.FieldType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -21,6 +25,9 @@ import lombok.ToString;
 @Table (name="field")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor//(access = AccessLevel.PRIVATE)
 @ToString(exclude = {"form"})
 @EqualsAndHashCode( of = {"id"})
 public class Field {

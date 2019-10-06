@@ -2,17 +2,17 @@ package hr.optimus.boardingapp.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import hr.optimus.boardingapp.model.BoardingTemplate;
 import hr.optimus.boardingapp.model.Field;
 import hr.optimus.boardingapp.model.Form;
 import hr.optimus.boardingapp.repository.BoardingTemplateRepository;
-import hr.optimus.boardingapp.repository.FieldRepository;
 import hr.optimus.boardingapp.repository.FormRepository;
 import hr.optimus.boardingapp.service.BoardingTemplateService;
 import hr.optimus.boardingapp.service.dto.BoardingTemplateDTO;
@@ -21,7 +21,6 @@ import hr.optimus.boardingapp.service.dto.FormDTO;
 import hr.optimus.boardingapp.service.dto.mapper.BoardingTemplateMapper;
 import hr.optimus.boardingapp.service.dto.mapper.FieldMapper;
 import hr.optimus.boardingapp.service.dto.mapper.FormMapper;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 
@@ -90,21 +89,21 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 
 	@Override
 	//TODO ne brise zapis iz baze samo ga setira na null
+	
 	public FormDTO removeForm(Long boardId, Long formId) {
 		BoardingTemplate template = boardingTemplateRepository.getOne(boardId);
 		if(template == null) {
 			return null;
 		}
-		for (Form form : template.getForms()) {
-			if(form.getId().longValue() == formId.longValue()) {
-				
-				template.removeForm(form);
-				form.getFields().clear();
-				boardingTemplateRepository.saveAndFlush(template);
-				return formMapper.toDto(form);
-			}
-			
+		Optional<Form> f = template.getForms().stream().
+				filter(object->object.getId().longValue()==formId.longValue()).
+				findFirst();
+		if(f.isPresent()) {
+			template.removeForm(f.get());
+			boardingTemplateRepository.saveAndFlush(template);
+			return formMapper.toDto(f.get());
 		}
+
 		return null;
 	}
 
@@ -114,13 +113,10 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 		if(template == null) {
 			return null;
 		}
-		for (Form form : template.getForms()) {
-			if(form.getId().longValue() == formId.longValue()) {
-				return formMapper.toDto(form);
-			}
-			
-		}
-		return null;
+		Optional<Form> f = template.getForms().stream().
+				filter(object->object.getId().longValue()==formId.longValue()).
+				findFirst();
+		return f.isPresent()?formMapper.toDto(f.get()):null;
 	}
 	
 	@Override
@@ -167,6 +163,7 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 		if( null == template) {
 			return null;
 		}
+		
 		for (Form form : template.getForms()) {
 			if(form.getId().longValue() == formId.longValue()) {
 				for ( Field field: form.getFields()) {

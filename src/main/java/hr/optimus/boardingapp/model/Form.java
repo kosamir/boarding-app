@@ -35,7 +35,7 @@ public class Form {
 	private String name;
 	private Integer numOfFields;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
 	private BoardingTemplate template;
 	
@@ -45,12 +45,12 @@ public class Form {
 	private List <Field> fields = new ArrayList<Field>();
 	
 
-	public void addField(Field f) {
-		fields.add(f);
-		f.setForm(this);
+	public void addField(Field field) {
+		fields.add(field);
+		field.setForm(this);
 	}
-	public void removeField(Field f) {
-		this.fields.remove(f);
-		f.setForm(null);
+	public void removeField(Field field) {
+		this.fields.remove(field);
+		field.setForm(null);
 	}
 }

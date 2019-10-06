@@ -19,7 +19,6 @@ public class BoardTemplateMapperImpl implements BoardingTemplateMapper{
 	private final BoardingTemplateMapper mapper;
 	
 	public BoardingTemplate toEntity(BoardingTemplateDTO dto) {
-		// TODO Auto-generated method stub
 		return mapper.toEntity(dto);
 	}
 

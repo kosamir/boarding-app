@@ -40,12 +40,11 @@ public class HomeController {
 		int completedSteps = 0;
 		List<FormDTO> formDTOs = service.getAllFormsFromBoard(templateId);
 		Long currentFormId = getFormId(templateId, completedSteps);
+		FormDTO formDTO = service.getFormById(new Long(templateId), new Long(currentFormId));
 		completedSteps++;
 		Long nextFormId = getFormId(templateId, completedSteps);
 		
 		mav.addObject("over", nextFormId==null?true:false);
-		
-		FormDTO formDTO = service.getFormById(new Long(templateId), new Long(currentFormId));
 		mav.addObject("template", templateId!=null?name:"nepostojeci template");
 		mav.addObject("numForms", formDTOs!=null?formDTOs.size():"0");
 		mav.addObject("link", config.getWebhost()+ URL);
@@ -56,14 +55,7 @@ public class HomeController {
 		mav.addObject("candidateId", null);
 		
 		mav.addObject("templateId", templateId);
-		
 		mav.addObject("form", formDTO);
-		
-		for (FormDTO dto : formDTOs) {
-			System.out.println(dto.toString());
-			
-		}
-		
 		return mav;
 	}
 	// moram do ovdje nekako progurat candidateId
