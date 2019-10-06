@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +25,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(exclude = {"template"})
-@EqualsAndHashCode( of = {"form_id"})
+@EqualsAndHashCode( of = {"id"})
 public class Form {
 	
 	@Id
@@ -43,7 +42,6 @@ public class Form {
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }
 			,mappedBy = "form", orphanRemoval = true
 			)
-//	@JoinColumn(name = "form_id")
 	private List <Field> fields = new ArrayList<Field>();
 	
 
@@ -52,7 +50,7 @@ public class Form {
 		f.setForm(this);
 	}
 	public void removeField(Field f) {
-		boolean remove = this.fields.remove(f);
+		this.fields.remove(f);
 		f.setForm(null);
 	}
 }

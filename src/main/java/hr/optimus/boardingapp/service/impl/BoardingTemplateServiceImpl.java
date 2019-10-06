@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import hr.optimus.boardingapp.model.BoardingTemplate;
@@ -20,19 +21,18 @@ import hr.optimus.boardingapp.service.dto.FormDTO;
 import hr.optimus.boardingapp.service.dto.mapper.BoardingTemplateMapper;
 import hr.optimus.boardingapp.service.dto.mapper.FieldMapper;
 import hr.optimus.boardingapp.service.dto.mapper.FormMapper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
+
 public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 	
 	private final BoardingTemplateRepository boardingTemplateRepository;
 	private final FormRepository formRepository;
-	private final FieldRepository fieldRepository;
 	private final BoardingTemplateMapper mapper;
 	private final FormMapper formMapper;
 	private final FieldMapper fieldMapper;
@@ -225,7 +225,6 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 
 	@Override
 	public Long getTemplateByName( String name) {
-		// TODO Auto-generated method stub
 		BoardingTemplate tmp = boardingTemplateRepository.getBoardingTemplateByName(name);
 		return tmp!=null?tmp.getId():null;
 	}
@@ -236,18 +235,12 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 		List<FormDTO> ret = new ArrayList<FormDTO>();
 		for (Form form : forms) {
 			Long boardId = form.getTemplate().getId();
-			if(boardId.longValue() == Id.longValue()) {
+			if(boardId!=null && boardId.longValue() == Id.longValue()) {
 				ret.add(formMapper.toDto(form));
 			}
 		}
 		return ret;
 	}
-
-	
-	
-
-	
-
 	
 
 }

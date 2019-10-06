@@ -19,6 +19,7 @@ public class HomeController {
 	private final BoardingTemplateService service;
 	private final static String INDEX = "index";
 	private final BoardingAppConfig config;
+	private final static String URL = "/candidate/collect/response";
 
 	
 	private Long getFormId(Long templateId, int completedSteps) {
@@ -47,11 +48,12 @@ public class HomeController {
 		FormDTO formDTO = service.getFormById(new Long(templateId), new Long(currentFormId));
 		mav.addObject("template", templateId!=null?name:"nepostojeci template");
 		mav.addObject("numForms", formDTOs!=null?formDTOs.size():"0");
-		mav.addObject("link", config.getWebhost()+ "/candidate/collect/response");
+		mav.addObject("link", config.getWebhost()+ URL);
 		
 		mav.addObject("completedSteps", completedSteps);
 		mav.addObject("formId", currentFormId);
 		mav.addObject("nextFormId", nextFormId);
+		mav.addObject("candidateId", null);
 		
 		mav.addObject("templateId", templateId);
 		
@@ -64,13 +66,14 @@ public class HomeController {
 		
 		return mav;
 	}
-	
-	@RequestMapping(value = { "{p_templateName}/{p_templateId}/{p_formId}/{p_numForms}/{p_numSteps}" })
+	// moram do ovdje nekako progurat candidateId
+	@RequestMapping(value = { "{p_templateName}/{p_templateId}/{p_formId}/{p_numForms}/{p_numSteps}/{p_candidatId}" })
 	public ModelAndView nextForm(@PathVariable String p_templateName,
 			@PathVariable String p_templateId, 
 			@PathVariable String p_formId, 
 			@PathVariable String p_numForms,
-			@PathVariable String p_numSteps) {
+			@PathVariable String p_numSteps,
+			@PathVariable String p_candidatId) {
 		
 		ModelAndView mav = new ModelAndView(INDEX);
 		FormDTO dto = service.getFormById(new Long(p_templateId), new Long(p_formId));
@@ -83,14 +86,15 @@ public class HomeController {
 		Long nextFormId = getFormId(templateId, numSteps);
 
 		mav.addObject("form", dto);
-		mav.addObject("link", config.getWebhost()+ "/candidate/collect/response");
+		mav.addObject("link", config.getWebhost()+ URL);
 		mav.addObject("template", p_templateName);
 		mav.addObject("numForms", numForms);
-		mav.addObject("completedSteps",++numSteps);
+		mav.addObject("completedSteps",numSteps);
 		mav.addObject("formId", p_formId);
 		mav.addObject("nextFormId", nextFormId);
 		mav.addObject("over", nextFormId==null?true:false);
 		mav.addObject("templateId", templateId);
+		mav.addObject("candidateId", p_candidatId);
 		
 		return mav;
 	}

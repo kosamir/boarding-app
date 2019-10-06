@@ -26,6 +26,7 @@ public class BoardingTemplate {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "board_id")
 	private Long id;
+	@Column(unique = true)
 	private String name;
 	private Integer numOfForms;
 
@@ -34,7 +35,6 @@ public class BoardingTemplate {
 			, mappedBy = "template"
 			, orphanRemoval = true
 			)
-//	@JoinColumn(name = "board_id")
 	private List<Form> forms = new ArrayList<Form>();
 	
 	public void addForm(Form f) {
@@ -43,7 +43,7 @@ public class BoardingTemplate {
 	}
 	
 	public void removeForm(Form f) {
-		boolean removed = this.forms.remove(f);
+		this.forms.remove(f);
 		f.setTemplate(null);
 		
 	}

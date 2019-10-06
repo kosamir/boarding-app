@@ -18,6 +18,7 @@ public class CandidateResponse {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "response_id")
 	private Long id;
+	private Long candidateId;
 	private Long boardId;
 	private Long FormId;
 	private Long FieldId;

@@ -1,0 +1,17 @@
+<html>
+<head>
+<body>
+<form id="uploadForm" enctype="multipart/form-data" th:action="@{/candidate/recognize}" action="post">
+			<input id="file" name="file" type="file" /> 
+			<input id="submit" type="submit" value="Upload" />
+				
+		</form>
+		<div id="progresBar" style = "display:none">
+		<progress name="progress"></progress>
+		</div>
+		<div id="error" style="text-shadow: 5px 2px red;"></div>
+		<div id="sucess" style="text-shadow: 5px 2px green;"></div>
+</body>
+
+</head>
+</html>

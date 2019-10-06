@@ -1,6 +1,5 @@
 package hr.optimus.boardingapp.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import hr.optimus.boardingapp.model.enums.FieldType;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +22,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(exclude = {"form"})
-@EqualsAndHashCode( of = {"field_id"})
+@EqualsAndHashCode( of = {"id"})
 public class Field {
 	
 	@Id

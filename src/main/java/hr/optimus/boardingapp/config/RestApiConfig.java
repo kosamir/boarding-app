@@ -15,7 +15,7 @@ public class RestApiConfig {
 
 	private String apiKey;
 	private String apiSecret;
-	
-	private String uploadDir;
 	private String apiUrl;
+	private String userId;
+	private String bearerToken;
 }

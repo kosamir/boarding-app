@@ -1,36 +1,124 @@
 $(document).ready(function() {
-
-  
+	//refactor
+	var candidateNewUrl = "/candidate/new";
+	var collectResponseUrl = "/candidate/collect/response";
+	var recognizeUrl = "/candidate/recognize";
 	
-	$( "genericForm" ).on( "submit", function( event ) {
+	function modifyLink(link, id){
+		var split = link.split('/')
+		split[6]=id;
+		return split.join('/')
+	}
+	
+	$( "#uploadForm" ).submit(function( event ) {
+		 event.preventDefault();
+		 var form = $('#uploadForm')[0];
+		 var data = new FormData(form);
+		 console.log(data + form);
+		 var $parent =  $(this).parent().parent();
+		 $.ajax({
+		         url: recognizeUrl,
+		         type: "POST",
+		         enctype: 'multipart/form-data',
+		         data:  data,
+		         contentType: false,
+		         cache: false,
+		         processData:false,
+		   beforeSend : function(){
+			   $("#progresBar").attr('style','display:block');
+			   $("#error").text("")
+		   },
+		   success: function(data){
+			   // refactor!
+			  delete data.id;
+			  switch(data.gender){
+			  case 'M/M':
+				  data.gender='Male';
+				  break;
+			  case 'F/F':
+				  data.gender='Female';
+				  break;
+			  default:
+				  data.gender='Other';
+			  }
+			  data.date=data.date.split('.').reverse().join('-')
+			  console.log(data);
+			  
+			   $.ajax({
+		            type        : 'POST', 
+		            url         : candidateNewUrl, 
+		            data        : data, 
+		            dataType    : 'json', 
+		            encode          : true,
+		            success: function(data){
+		 			   $("#sucess").text("SAVED!!")
+		 			   $("*").prop('disabled',true);
+		 			   $("#submitGeneric").hide();
+		 			   $("#file").hide();
+		 			   $("#submit").hide();
+		 			   $("#progresBar").hide();
+		 			   var link = $("#next").attr('href');
+		 			   var new_link = modifyLink(link, data.id);
+		 			   $("#next").attr('href',new_link)
+		 			   console.log($("#next").attr('href'));
+		 			 
+		 			  
+		 		    },
+		 		    error: function(event){ 
+		 		    	 $("#progresBar").hide();
+		 		    	 $("#error").text(event.responseText)
+		 		    	 console.log(event.responseText);
+		 		    }
+		        })
+  
+		    },
+		    error: function(event){ 
+		    	 $("#progresBar").attr('style','display:none');
+		    	 $("#error").text(event.responseText)
+		    	 console.log(event.responseText);
+		    }
+		          
+		  });
+	});
+		
+	
+	$( "#genericForm" ).submit(function( event ) {
 		  event.preventDefault();
-		  var formData = $( this ).serialize()
-		  console.log(formData  );
-		  return;
-
+		  var formData = $( this ).serialize();
+		  console.log(formData );
+		 
+		  var $parent = $(this).parent().parent();
+		  var completedSteps = $parent.find("#completedSteps").text();
+		  console.log('completedSteps:'+completedSteps);
+		  var apiUrl = completedSteps == 1?candidateNewUrl:collectResponseUrl;
+		  console.log(apiUrl);
 
 	        // process the form
 	        $.ajax({
-	            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-	            url         : 'process.php', // the url where we want to POST
-	            data        : formData, // our data object
-	            dataType    : 'json', // what type of data do we expect back from the server
-	            encode          : true
+	            type        : 'POST', 
+	            url         : apiUrl, 
+	            data        : formData, 
+	            dataType    : 'json', 
+	            encode      : true,
+	            success: function(data){
+	 			   $("#sucess").text("SAVED!!")
+	 			   $("*").prop('disabled',true);
+	 			   $("#submitGeneric").hide();
+	 			   var link = $("#next").attr('href');
+	 			   var new_link =completedSteps==1? modifyLink(link, data.id):link
+	 			   $("#next").attr('href',new_link)
+//	 			   $("#error").text($("#next").attr('href'))
+	 			   console.log($("#next").attr('href'));
+	 			   $parent.find('#file').hide();
+	 			   $parent.find('#submit').hide();
+	 		    },
+	 		    error: function(event){ 
+	 		    	 $("#progresBar").attr('style','display:none');
+	 		    	 $("#error").text(event.responseText)
+	 		    	 console.log(event.responseText);
+	 		    }
 	        })
-	            // using the done promise callback
-	            .done(function(data) {
-
-	                // log data to the console so we can see
-	                console.log(data); 
-
-	                // here we will handle errors and validation messages
-	            });
-
-	        // stop the form from submitting the normal way and refreshing the page
-	        event.preventDefault();
-	    
 		  
 		});
-   
     
 });

@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import hr.optimus.boardingapp.service.BoardingTemplateService;
 import hr.optimus.boardingapp.service.dto.BoardingTemplateDTO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("boarding_template")
 @RequiredArgsConstructor
-@Slf4j
 public class BoardingTemplateController {
 	
 	private final BoardingTemplateService boardingTemplateService;
