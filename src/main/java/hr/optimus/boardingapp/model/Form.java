@@ -33,7 +33,7 @@ public class Form {
 	@Column(name = "form_id")
 	private Long id;
 	private String name;
-	private Integer numOfFields;
+	private Integer numOfFields = new Integer(0);
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
@@ -47,10 +47,12 @@ public class Form {
 
 	public void addField(Field field) {
 		fields.add(field);
+		numOfFields++;
 		field.setForm(this);
 	}
 	public void removeField(Field field) {
 		this.fields.remove(field);
+		numOfFields--;
 		field.setForm(null);
 	}
 }

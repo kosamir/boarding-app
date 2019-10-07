@@ -20,7 +20,7 @@ public class FormController {
 
 	private final BoardingTemplateService boardingTemplateService;  
 	
-	@RequestMapping( value ="/{boardId}/form/new", 
+	@RequestMapping( value ="/{boardId}/form", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.POST)
 	public ResponseEntity<Object> addNewForm(@PathVariable String boardId, @RequestBody FormDTO p_dto){
@@ -29,7 +29,7 @@ public class FormController {
 	}
 	
 	
-	@RequestMapping( value ="/{boardId}/form/get/{formId}", 
+	@RequestMapping( value ="/{boardId}/form/{formId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.GET)
 	public ResponseEntity<Object> getFormById(@PathVariable String boardId, @PathVariable String formId){
@@ -40,7 +40,7 @@ public class FormController {
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
 	
-	@RequestMapping( value ="/{boardId}/form/edit/{formId}", 
+	@RequestMapping( value ="/{boardId}/form/{formId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.PUT)
 	public ResponseEntity<Object> updateFormById(@PathVariable String boardId, @PathVariable String formId, @RequestBody FormDTO p_dto){
@@ -51,7 +51,7 @@ public class FormController {
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
 	
-	@RequestMapping( value ="/{boardId}/form/delete/{formId}", 
+	@RequestMapping( value ="/{boardId}/form/{formId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteFormById(@PathVariable String boardId, @PathVariable String formId){
@@ -59,7 +59,6 @@ public class FormController {
 		if(dto == null) {
 			return new  ResponseEntity<Object>("Not found", HttpStatus.NOT_FOUND);
 		}
-//		BoardingTemplateDTO retDto = boardingTemplateService.save(dto);
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
 }

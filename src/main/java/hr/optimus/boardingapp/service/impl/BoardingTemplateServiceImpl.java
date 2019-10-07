@@ -82,9 +82,10 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 		template.addForm(entity);
 		boardingTemplateRepository.saveAndFlush(template);
 		//hack ovo je loshe treba istrazit zasto ne vraca id nakon flush-a
-		entity.setId(template.getForms().get(template.getForms().size()-1).getId());
+		Long formId= template.getForms().get(template.getForms().size()-1).getId();
 		
-		return formMapper.toDto(entity);
+		
+		return formMapper.toDto(formRepository.getOne(formId));
 	}
 
 	@Override

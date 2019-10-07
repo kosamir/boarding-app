@@ -59,7 +59,7 @@ public class HomeController {
 		return mav;
 	}
 	// moram do ovdje nekako progurat candidateId
-	@RequestMapping(value = { "{p_templateName}/{p_templateId}/{p_formId}/{p_numForms}/{p_numSteps}/{p_candidatId}" })
+	@RequestMapping(value = { "/{p_templateName}/{p_templateId}/{p_formId}/{p_numForms}/{p_numSteps}/{p_candidatId}" })
 	public ModelAndView nextForm(@PathVariable String p_templateName,
 			@PathVariable String p_templateId, 
 			@PathVariable String p_formId, 

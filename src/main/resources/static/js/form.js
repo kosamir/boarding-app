@@ -9,7 +9,7 @@ $(document).ready(function() {
 		split[6]=id;
 		return split.join('/')
 	}
-	
+	// pozivanje mblink apija + spremanje vracenih podataka u candidate tablicu
 	$( "#uploadForm" ).submit(function( event ) {
 		 event.preventDefault();
 		 var form = $('#uploadForm')[0];
@@ -61,8 +61,6 @@ $(document).ready(function() {
 		 			   var new_link = modifyLink(link, data.id);
 		 			   $("#next").attr('href',new_link)
 		 			   console.log($("#next").attr('href'));
-		 			 
-		 			  
 		 		    },
 		 		    error: function(event){ 
 		 		    	 $("#progresBar").hide();
@@ -70,7 +68,6 @@ $(document).ready(function() {
 		 		    	 console.log(event.responseText);
 		 		    }
 		        })
-  
 		    },
 		    error: function(event){ 
 		    	 $("#progresBar").attr('style','display:none');
@@ -81,15 +78,16 @@ $(document).ready(function() {
 		  });
 	});
 		
-	
+	// submit generirane forme na server..
 	$( "#genericForm" ).submit(function( event ) {
 		  event.preventDefault();
 		  var formData = $( this ).serialize();
 		  console.log(formData );
-		 
+	
 		  var $parent = $(this).parent().parent();
 		  var completedSteps = $parent.find("#completedSteps").text();
 		  console.log('completedSteps:'+completedSteps);
+		 // prvi korak u wizardu je spremanje u tablicu candidate
 		  var apiUrl = completedSteps == 1?candidateNewUrl:collectResponseUrl;
 		  console.log(apiUrl);
 
@@ -107,7 +105,6 @@ $(document).ready(function() {
 	 			   var link = $("#next").attr('href');
 	 			   var new_link =completedSteps==1? modifyLink(link, data.id):link
 	 			   $("#next").attr('href',new_link)
-//	 			   $("#error").text($("#next").attr('href'))
 	 			   console.log($("#next").attr('href'));
 	 			   $parent.find('#file').hide();
 	 			   $parent.find('#submit').hide();

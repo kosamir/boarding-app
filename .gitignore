@@ -15,6 +15,8 @@ target/
 .config
 src/main/resources/application-*
 test.jpage
+src/main/resources/static/js/spa.js
+src/main/resources/templates/fragments/spa.html
 
 
 ### IntelliJ IDEA ###

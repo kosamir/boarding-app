@@ -20,6 +20,7 @@ import hr.optimus.boardingapp.service.CandidateService;
 import hr.optimus.boardingapp.service.dto.CandidateDTO;
 import hr.optimus.boardingapp.service.dto.CandidateResponseDTO;
 import hr.optimus.boardingapp.service.dto.mapper.CandidateMapper;
+import hr.optimus.boardingapp.service.dto.mapper.CandidateResponseMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,6 +34,7 @@ public class CandidateServiceImpl implements CandidateService {
 	private final FormRepository formRepository;
 	private final FieldRepository fieldRepository;
 	private final CandidateMapper mapper;
+	private final CandidateResponseMapper responseMapper;
 
 	@Override
 	public CandidateDTO addNewCandidate(String payload) {
@@ -42,27 +44,31 @@ public class CandidateServiceImpl implements CandidateService {
 		return mapper.toDTO(entity);
 	}
 
-	// SHORT_TEXT_FIELD_25=amir&SHORT_TEXT_FIELD_26=kos&SHORT_TEXT_FIELD_27=koste&DATE_28=2019-10-03&CHOICE_29=Male
+	//payload= SHORT_TEXT_FIELD_25=amir&SHORT_TEXT_FIELD_26=kos&SHORT_TEXT_FIELD_27=koste&DATE_28=2019-10-03&CHOICE_29=Male
 	// REFACTOR!!
 	private CandidateDTO toCandidateDTO(String payload) {
 		CandidateDTO dto = new CandidateDTO();
 		String[] arr = payload.split("&");
+		
 		String firstName = (arr[0].split("="))[1];
 		dto.setFirstName(firstName);
+		
 		String lastName = (arr[1].split("="))[1];
 		dto.setLastName(lastName);
+		
 		String adress = (arr[2].split("="))[1].replace("+", " ");
-		;
 		dto.setAddress(adress);
+		
 		String date = (arr[3].split("="))[1];
 		dto.setDate(date);
+		
 		String gender = (arr[4].split("="))[1].toUpperCase();
 		dto.setGender(gender);
 		return dto;
 	}
 
 	@Override
-	// templateId=23&formId=30&candiateId=candiateId&CHOICE_31=%20Prolog
+	//payload= templateId=23&formId=30&candiateId=candiateId&CHOICE_31=%20Prolog
 	// REFACTOR!
 	public List<CandidateResponseDTO> addCandidateResponses(String payload) {
 		String[] array = payload.split("&");
@@ -70,18 +76,17 @@ public class CandidateServiceImpl implements CandidateService {
 		Long formId = new Long((array[1].split("="))[1].trim());
 		Long candidateId = new Long(array[2].split("=")[1].trim());
 		List<CandidateResponse> lst = new ArrayList<CandidateResponse>();
-		int num_data_on_form = 0;
 		for (int i = 3; i < array.length; ++i) {
 			CandidateResponse response = new CandidateResponse();
-			response.setBoardId(templateId);
-			response.setFormId(formId);
-			response.setCandidateId(candidateId);
+			response.setCandidate(repository.getOne(candidateId));
+			response.setTemplate(boardingRepository.getOne(templateId));
+			response.setForm(formRepository.getOne(formId));
+
 			Map<String, String> ret = extractValue(array[i]);
 
-			response.setFieldId(new Long(ret.get("fieldId")));
+			response.setField(fieldRepository.getOne(new Long(ret.get("fieldId"))));
 			response.setAnswer(ret.get("value"));
 			lst.add(response);
-			num_data_on_form++;
 		}
 		List<CandidateResponse> ret = responseRepository.saveAll(lst);
 		return toDto(ret);
@@ -109,15 +114,24 @@ public class CandidateServiceImpl implements CandidateService {
 	private List<CandidateResponseDTO> toDto(List<CandidateResponse> responses) {
 		List<CandidateResponseDTO> ret = new ArrayList<CandidateResponseDTO>();
 		for (CandidateResponse candidateResponse : responses) {
-			CandidateResponseDTO dto = new CandidateResponseDTO();
-			dto.setId(candidateResponse.getId());
-			dto.setBoardName((boardingRepository.findById(candidateResponse.getBoardId()).orElse(null)).getName());
-			dto.setFormName((formRepository.findById(candidateResponse.getFormId()).orElse(null)).getName());
-			dto.setFieldName((fieldRepository.findById(candidateResponse.getFieldId()).orElse(null)).getLabel());
-			dto.setAnswer(candidateResponse.getAnswer());
+			CandidateResponseDTO dto = responseMapper.toDto(candidateResponse);
 			ret.add(dto);
 		}
 		return ret;
+	}
+
+	@Override
+	public CandidateDTO addNewCandidate(CandidateDTO dto) {
+		Candidate entity = mapper.toEntity(dto);
+		repository.save(entity);
+		return mapper.toDTO(repository.getOne(entity.getId()));
+	}
+
+	@Override
+	public CandidateResponseDTO addCandidateResponse(CandidateResponseDTO dto) {
+		CandidateResponse entity = responseMapper.toEntity(dto);
+		responseRepository.save(entity);
+		return responseMapper.toDto(entity);
 	}
 
 }

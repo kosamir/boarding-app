@@ -9,5 +9,10 @@ public class CandidateResponseDTO {
 	private String formName;
 	private String fieldName;
 	private String answer;
+	
+	private BoardingTemplateDTO template;
+	private FormDTO form;
+	private FieldDTO field;
+	private CandidateDTO candidate;
 
 }

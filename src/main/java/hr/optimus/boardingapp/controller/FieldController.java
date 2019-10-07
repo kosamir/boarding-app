@@ -20,7 +20,7 @@ public class FieldController {
 
 	private final BoardingTemplateService boardingTemplateService;  
 	
-	@RequestMapping( value ="/{boardId}/{formId}/field/new", 
+	@RequestMapping( value ="{boardId}/form/{formId}/field", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.POST)
 	public ResponseEntity<Object> addNewField(@PathVariable String boardId,@PathVariable String formId, @RequestBody FieldDTO p_dto){
@@ -32,7 +32,7 @@ public class FieldController {
 	}
 	
 	
-	@RequestMapping( value ="/{boardId}/{formId}/field/get/{fieldId}", 
+	@RequestMapping( value ="{boardId}/form/{formId}/field/{fieldId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.GET)
 	public ResponseEntity<Object> getFieldById(@PathVariable String boardId,@PathVariable String formId,@PathVariable String fieldId){
@@ -43,7 +43,7 @@ public class FieldController {
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
 	
-	@RequestMapping( value ="/{boardId}/{formId}/field/edit/{fieldId}", 
+	@RequestMapping( value ="{boardId}/form/{formId}/field/{fieldId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.PUT)
 	public ResponseEntity<Object> updateFieldById(@PathVariable String boardId,@PathVariable String formId,@PathVariable String fieldId, @RequestBody FieldDTO p_dto){
@@ -55,7 +55,7 @@ public class FieldController {
 	}
 	
 	
-	@RequestMapping( value ="/{boardId}/{formId}/field/delete/{fieldId}", 
+	@RequestMapping( value ="{boardId}/form/{formId}/field/{fieldId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteFieldById(@PathVariable String boardId,@PathVariable String formId,@PathVariable String fieldId){
@@ -63,7 +63,6 @@ public class FieldController {
 		if(dto == null) {
 			return new  ResponseEntity<Object>("Not found", HttpStatus.NOT_FOUND);
 		}
-//		BoardingTemplateDTO retDto = boardingTemplateService.save(dto);
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
 }

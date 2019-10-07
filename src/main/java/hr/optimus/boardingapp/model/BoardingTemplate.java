@@ -13,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -30,7 +28,7 @@ public class BoardingTemplate {
 	private Long id;
 	@Column(unique = true)
 	private String name;
-	private Integer numOfForms;
+	private Integer numOfForms = new Integer(0);
 
 	@OneToMany(fetch = FetchType.EAGER, 
 			cascade = { CascadeType.ALL}
@@ -42,12 +40,14 @@ public class BoardingTemplate {
 	public void addForm(Form f) {
 		f.setTemplate(this);
 		this.forms.add(f);
+		numOfForms++;
 	}
 	
 	public void removeForm(Form form) {
 		form.getFields().clear();
 		form.setTemplate(null);
 		this.forms.remove(form);
+		numOfForms--;
 		
 	}
 }

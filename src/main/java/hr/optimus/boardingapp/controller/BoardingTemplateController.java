@@ -20,7 +20,7 @@ public class BoardingTemplateController {
 	
 	private final BoardingTemplateService boardingTemplateService;
 	
-	@RequestMapping( value ="/new", 
+	@RequestMapping( value ="", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.POST)
 	public ResponseEntity<BoardingTemplateDTO> addNewTempalate(@RequestBody BoardingTemplateDTO dto){
@@ -29,20 +29,17 @@ public class BoardingTemplateController {
 	}
 	
 	
-	@RequestMapping(value = "/get/{templateId}", 
+	@RequestMapping(value = "/{templateId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			method = RequestMethod.GET )
 	public ResponseEntity<BoardingTemplateDTO> getTemplateById(@PathVariable String templateId){
-		// todo validacija jsona
 		BoardingTemplateDTO dto = boardingTemplateService.getTemplateById(new Long(templateId));
-
 		return  new ResponseEntity<BoardingTemplateDTO>(dto, HttpStatus.OK); 
 	}
 	
 	
-	@RequestMapping(value = "/edit/{templateId}", 
+	@RequestMapping(value = "/{templateId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
-			
 			method = RequestMethod.PUT )
 	public ResponseEntity<BoardingTemplateDTO> updateTemplate(@PathVariable String templateId, @RequestBody BoardingTemplateDTO dto){
 		BoardingTemplateDTO ret = boardingTemplateService.updateTemplate(new Long(templateId), dto);
@@ -50,7 +47,7 @@ public class BoardingTemplateController {
 		return new ResponseEntity<BoardingTemplateDTO>(ret, HttpStatus.OK); 
 	}
 	
-	@RequestMapping(value = "/delete/{templateId}", 
+	@RequestMapping(value = "/{templateId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			method = RequestMethod.DELETE )
 	public ResponseEntity<BoardingTemplateDTO> deleteTemplate(@PathVariable String templateId){

@@ -40,6 +40,31 @@ public class UserController {
 		return new ResponseEntity<Object>(candidateDto, HttpStatus.OK);   
 	}
 	
+	
+	
+	@RequestMapping( value ="", 
+			produces = MediaType.APPLICATION_JSON_VALUE, 
+			method = RequestMethod.POST)
+	public ResponseEntity<Object> addNewCandidateRest(@RequestBody CandidateDTO dto){
+		
+		CandidateDTO candidateDto = service.addNewCandidate(dto);
+		if(null == candidateDto) {
+			return new ResponseEntity<Object>("Error!", HttpStatus.INTERNAL_SERVER_ERROR);   
+		}
+		return new ResponseEntity<Object>(candidateDto, HttpStatus.OK);   
+	}
+	
+	@RequestMapping( value ="/response/{candidateId}/", 
+			produces = MediaType.APPLICATION_JSON_VALUE, 
+			method = RequestMethod.POST)
+	public ResponseEntity<Object> collectRestResponse(@RequestBody CandidateResponseDTO dto){
+		CandidateResponseDTO ret  = service.addCandidateResponse(dto);
+		if(null == ret) {
+			return new ResponseEntity<Object>("Error!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Object>(ret, HttpStatus.OK);
+	}
+	
 
 	
 	@RequestMapping( value ="/recognize", 
