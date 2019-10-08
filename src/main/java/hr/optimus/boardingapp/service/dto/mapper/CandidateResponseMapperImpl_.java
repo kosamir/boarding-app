@@ -8,7 +8,7 @@ import hr.optimus.boardingapp.service.dto.CandidateResponseDTO;
 import lombok.RequiredArgsConstructor;
 
 @Primary
-@Service("CandidateResponseMapperImpl")
+@Service("CandidateResponseMapperImpl_")
 @RequiredArgsConstructor
 public class CandidateResponseMapperImpl_ implements CandidateResponseMapper {
 

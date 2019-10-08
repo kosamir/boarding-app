@@ -33,10 +33,7 @@ public class CandidateResponse {
 	@JoinColumn(name = "field_id")
 	private Field field;
 	
-//	private Long candidateId;
-//	private Long boardId;
-//	private Long FormId;
-//	private Long FieldId;
+
 	private String answer;
 
 }

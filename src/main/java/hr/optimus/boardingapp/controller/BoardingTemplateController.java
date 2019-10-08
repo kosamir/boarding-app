@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import hr.optimus.boardingapp.error.ApiError;
 import hr.optimus.boardingapp.service.BoardingTemplateService;
 import hr.optimus.boardingapp.service.dto.BoardingTemplateDTO;
 import lombok.RequiredArgsConstructor;
@@ -23,36 +24,47 @@ public class BoardingTemplateController {
 	@RequestMapping( value ="", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.POST)
-	public ResponseEntity<BoardingTemplateDTO> addNewTempalate(@RequestBody BoardingTemplateDTO dto){
+	public ResponseEntity<Object> addNewTempalate(@RequestBody BoardingTemplateDTO dto){
 		BoardingTemplateDTO retDto = boardingTemplateService.addTemplate(dto);
-		return new ResponseEntity<BoardingTemplateDTO>(retDto, HttpStatus.OK);   
+		if(null==retDto) {
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR,"Error",null), HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		return new ResponseEntity<Object>(retDto, HttpStatus.OK);   
 	}
 	
 	
 	@RequestMapping(value = "/{templateId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			method = RequestMethod.GET )
-	public ResponseEntity<BoardingTemplateDTO> getTemplateById(@PathVariable String templateId){
+	public ResponseEntity<Object> getTemplateById(@PathVariable String templateId){
 		BoardingTemplateDTO dto = boardingTemplateService.getTemplateById(new Long(templateId));
-		return  new ResponseEntity<BoardingTemplateDTO>(dto, HttpStatus.OK); 
+		if(null==dto) {
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.NOT_FOUND,"Not Found",null), HttpStatus.NOT_FOUND); 
+		}
+		return  new ResponseEntity<Object>(dto, HttpStatus.OK); 
 	}
 	
 	
 	@RequestMapping(value = "/{templateId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.PUT )
-	public ResponseEntity<BoardingTemplateDTO> updateTemplate(@PathVariable String templateId, @RequestBody BoardingTemplateDTO dto){
+	public ResponseEntity<Object> updateTemplate(@PathVariable String templateId, @RequestBody BoardingTemplateDTO dto){
 		BoardingTemplateDTO ret = boardingTemplateService.updateTemplate(new Long(templateId), dto);
-
-		return new ResponseEntity<BoardingTemplateDTO>(ret, HttpStatus.OK); 
+		if(null==ret) {
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.NOT_FOUND,"Not Found",null), HttpStatus.NOT_FOUND); 
+		}
+		return new ResponseEntity<Object>(ret, HttpStatus.OK); 
 	}
 	
 	@RequestMapping(value = "/{templateId}", 
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			method = RequestMethod.DELETE )
-	public ResponseEntity<BoardingTemplateDTO> deleteTemplate(@PathVariable String templateId){
-		
-		return  new ResponseEntity<BoardingTemplateDTO>(boardingTemplateService.removeTemplate(new Long(templateId)), HttpStatus.OK); 
+	public ResponseEntity<Object> deleteTemplate(@PathVariable String templateId){
+		BoardingTemplateDTO dto = boardingTemplateService.removeTemplate(new Long(templateId));
+		if(null == dto) {
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.NOT_FOUND,"Not Found",null), HttpStatus.NOT_FOUND); 
+		}
+		return  new ResponseEntity<Object>(dto, HttpStatus.OK); 
 	}
 	
 	

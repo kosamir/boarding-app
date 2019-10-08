@@ -18,4 +18,5 @@ public class RestApiConfig {
 	private String apiUrl;
 	private String userId;
 	private String bearerToken;
+	private String [] apiRequestData;
 }

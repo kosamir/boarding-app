@@ -33,6 +33,7 @@ public class MicroBlinkApiServiceImpl implements MicroBlinkApiService {
 		ApiCallObject body = new ApiCallObject();
  		body.setImageBase64(Base64.getEncoder().encodeToString(file.getBytes()));
  		body.setUserId(config.getUserId());
+ 		body.setRecognizers(config.getApiRequestData());
  		
  		HttpHeaders headers = new HttpHeaders();
  	    headers.put("Authorization", Arrays.asList(config.getBearerToken()));
@@ -44,8 +45,7 @@ public class MicroBlinkApiServiceImpl implements MicroBlinkApiService {
  	   
  	    ResponseEntity<String> response = template.exchange(config.getApiUrl(), HttpMethod.POST, request, String.class);
  	    String responseJson = response.getBody();
- 	    
-// 	    String result = mapper.readTree(responseJson).get("data").get(0).get("result");
+
  	    if(mapper.readTree(responseJson).get("data").get(0).get("result").isNull() ) {
  	    	return new CandidateDTO();
  	    }

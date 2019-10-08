@@ -12,9 +12,9 @@ import hr.optimus.boardingapp.service.dto.FormDTO;
 import lombok.RequiredArgsConstructor;
 
 @Primary
-@Service("BoardTemplateMapperImpl")
+@Service("BoardingTemplateMapperImpl_")
 @RequiredArgsConstructor
-public class BoardTemplateMapperImpl implements BoardingTemplateMapper{
+public class BoardingTemplateMapperImpl_ implements BoardingTemplateMapper{
 	
 	private final BoardingTemplateMapper mapper;
 	

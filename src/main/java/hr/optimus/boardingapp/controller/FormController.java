@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import hr.optimus.boardingapp.error.ApiError;
 import hr.optimus.boardingapp.service.BoardingTemplateService;
 import hr.optimus.boardingapp.service.dto.FormDTO;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,9 @@ public class FormController {
 			method = RequestMethod.POST)
 	public ResponseEntity<Object> addNewForm(@PathVariable String boardId, @RequestBody FormDTO p_dto){
 		FormDTO formDto = boardingTemplateService.addForm(new Long(boardId), p_dto);
+		if(null== formDto) {
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR,"Error",null), HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
 		return new ResponseEntity<Object>(formDto, HttpStatus.OK);   
 	}
 	
@@ -35,7 +39,7 @@ public class FormController {
 	public ResponseEntity<Object> getFormById(@PathVariable String boardId, @PathVariable String formId){
 		FormDTO dto = boardingTemplateService.getFormById(new Long(boardId), new Long(formId));
 		if(null == dto) {
-			return new ResponseEntity<Object>(dto, HttpStatus.NOT_FOUND); 
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.NOT_FOUND,"Not Found",null), HttpStatus.NOT_FOUND);  
 		}
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
@@ -46,7 +50,7 @@ public class FormController {
 	public ResponseEntity<Object> updateFormById(@PathVariable String boardId, @PathVariable String formId, @RequestBody FormDTO p_dto){
 		FormDTO dto = boardingTemplateService.updateForm(new Long(boardId), new Long(formId), p_dto);
 		if(dto == null) {
-			return new  ResponseEntity<Object>(dto, HttpStatus.NOT_FOUND);
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.NOT_FOUND,"Not Found",null), HttpStatus.NOT_FOUND); 
 		}
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
@@ -57,7 +61,7 @@ public class FormController {
 	public ResponseEntity<Object> deleteFormById(@PathVariable String boardId, @PathVariable String formId){
 		FormDTO dto = boardingTemplateService.removeForm(new Long(boardId), new Long(formId));
 		if(dto == null) {
-			return new  ResponseEntity<Object>("Not found", HttpStatus.NOT_FOUND);
+			return  new ResponseEntity<Object>(new ApiError(HttpStatus.NOT_FOUND,"Not Found",null), HttpStatus.NOT_FOUND); 
 		}
 		return new ResponseEntity<Object>(dto, HttpStatus.OK);   
 	}
