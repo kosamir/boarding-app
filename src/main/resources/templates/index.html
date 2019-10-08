@@ -11,16 +11,9 @@
 
 <div>Naziv predloska</div>
 <div th:text="${template}"></div>
-<!-- <div>Broj Koraka</div> -->
-<!-- <div th:text="${numForms}"></div> -->
-<!-- <div>Id forme</div> -->
-<!-- <div th:text="${formId}"></div> -->
-<!-- <div>Id sljedece forme</div> -->
-<!-- <div th:text="${nextFormId}"></div> -->
 
-<!-- <div>Broj odradjenih koraka</div> -->
 <div id="completedSteps" th:text="${completedSteps}" style="display:none;"></div>
-<!-- <div>CandidateId</div> -->
+
 <div id="candidateId" th:text="${candidateId}" style="display:none;"></div>
 
 <div th:if="${form != null}">
@@ -29,8 +22,7 @@
 <div th:if="${completedSteps == 1}">
 	<div th:replace="fragments/upload">...</div>
 </div>
-<!-- <div>Završeno</div> -->
-<!-- <div th:text="${over}"></div> -->
+
 
 <div th:if="${!over}">
 <a id="next" th:href="@{'/'+${template}+'/'+ ${templateId}+'/'+ ${nextFormId} + '/'+${numForms}+'/'+${completedSteps}+'/'+${candidateId}}" th:text="${completedSteps==0?'Zapocni':'Sljedeca'}"></a>

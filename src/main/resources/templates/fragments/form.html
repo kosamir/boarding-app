@@ -10,8 +10,7 @@
 
 	<form id="genericForm" th:action="@{${link}}" th:object="${form}" method="post">
 		<div th:text="${form.name}"></div>
-<!-- 		<div th:text="${completedSteps.intValue()}"></div> -->
-<!-- 		<div th:text="${completedSteps &gt; 1}"></div> -->
+
 		<div th:if="${completedSteps &gt; 1}">
 		<input name="templateId" type="hidden" th:value="${templateId}" /> 
 		<input name="formId" type="hidden" th:value="${formId}" />
