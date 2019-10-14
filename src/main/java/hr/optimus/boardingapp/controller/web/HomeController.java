@@ -3,10 +3,8 @@ package hr.optimus.boardingapp.controller.web;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import hr.optimus.boardingapp.config.BoardingAppConfig;
@@ -32,17 +30,13 @@ public class HomeController {
 		
 	}
 	
-	@GetMapping("favicon.ico")
-    @ResponseBody
-    void returnNoFavicon() {
-    }
-	
 
 	@RequestMapping(value = { "/{name}"})
 	public ModelAndView index(@PathVariable String name) {
 
 		ModelAndView mav = new ModelAndView(INDEX);
 		Long templateId = service.getTemplateByName(name);
+		System.out.println("name:" + name);
 		
 		int completedSteps = 0;
 		List<FormDTO> formDTOs = service.getAllFormsFromBoard(templateId);
