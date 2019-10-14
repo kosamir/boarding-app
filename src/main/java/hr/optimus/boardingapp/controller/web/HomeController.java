@@ -31,7 +31,7 @@ public class HomeController {
 	}
 	
 
-	@RequestMapping(value = { "/{name}", ""," "})
+	@RequestMapping(value = { "/{name}"})
 	public ModelAndView index(@PathVariable String name) {
 
 		ModelAndView mav = new ModelAndView(INDEX);
