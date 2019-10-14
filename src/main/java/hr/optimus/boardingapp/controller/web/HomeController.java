@@ -36,7 +36,6 @@ public class HomeController {
 
 		ModelAndView mav = new ModelAndView(INDEX);
 		Long templateId = service.getTemplateByName(name);
-		System.out.println("name:" + name);
 		
 		int completedSteps = 0;
 		List<FormDTO> formDTOs = service.getAllFormsFromBoard(templateId);
