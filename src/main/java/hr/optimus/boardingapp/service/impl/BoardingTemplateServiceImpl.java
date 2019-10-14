@@ -223,7 +223,7 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 		List<Form> forms = formRepository.findAll();
 		List<FormDTO> ret = new ArrayList<FormDTO>();
 		for (Form form : forms) {
-			Long boardId = form.getTemplate().getId();
+			Long boardId = form.getTemplate()!=null?form.getTemplate().getId():null;
 			if (boardId != null && boardId.longValue() == Id.longValue()) {
 				ret.add(formMapper.toDto(form));
 			}
