@@ -13,7 +13,7 @@ import hr.optimus.boardingapp.repository.BoardingTemplateRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component
-@Profile("local")
+@Profile("dev")
 @RequiredArgsConstructor
 public class DevBootStrap implements ApplicationListener<ContextRefreshedEvent> {
 

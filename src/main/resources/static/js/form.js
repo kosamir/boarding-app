@@ -42,13 +42,20 @@ $(document).ready(function() {
 				  data.gender='Other';
 			  }
 			  data.date=data.date.split('.').reverse().join('-')
-			  console.log(data);
-			  
+//			  console.log(JSON.stringify(data));
+			  const mapped = Object.entries(data).map(element => {
+				  var data = {};
+				  data.name = element[0];
+				  data.value = element[1];
+				  return data;
+				});
+			  console.log(mapped)
+			  console.log(JSON.stringify(mapped));
 			   $.ajax({
 		            type        : 'POST', 
 		            url         : candidateNewUrl, 
-		            data        : data, 
-		            dataType    : 'json', 
+		            data        : JSON.stringify(mapped), 
+		            contentType: 'application/json',
 		            encode          : true,
 		            success: function(data){
 		 			   $("#sucess").text("SAVED!!")
@@ -81,8 +88,12 @@ $(document).ready(function() {
 	// submit generirane forme na server..
 	$( "#genericForm" ).submit(function( event ) {
 		  event.preventDefault();
-		  var formData = $( this ).serialize();
-		  console.log(formData );
+		  var formData2 = $(this).serializeArray();
+		  
+		  var data = {};
+		  $(this).serializeArray().map(function(x){data[x.name] = x.value;}); 
+		  console.log(formData2 );
+		  console.log(JSON.stringify(formData2));
 	
 		  var $parent = $(this).parent().parent();
 		  var completedSteps = $parent.find("#completedSteps").text();
@@ -95,8 +106,8 @@ $(document).ready(function() {
 	        $.ajax({
 	            type        : 'POST', 
 	            url         : apiUrl, 
-	            data        : formData, 
-	            dataType    : 'json', 
+	            data        : JSON.stringify(formData2),//formData, 
+	            contentType: 'application/json',
 	            encode      : true,
 	            success: function(data){
 	 			   $("#sucess").text("SAVED!!")

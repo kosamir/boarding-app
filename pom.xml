@@ -23,6 +23,27 @@
 		<lombok.version>1.18.8</lombok.version>
 		<org.mapstruct.version>1.2.0.CR2</org.mapstruct.version>
 	</properties>
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<h2.scope>runtime</h2.scope>
+			</properties>
+		</profile>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<h2.scope>test</h2.scope>
+			</properties>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -45,7 +66,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>test</scope>
+			<scope>${h2.scope}</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>

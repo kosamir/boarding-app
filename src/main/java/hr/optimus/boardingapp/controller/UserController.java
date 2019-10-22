@@ -1,10 +1,12 @@
 package hr.optimus.boardingapp.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import hr.optimus.boardingapp.service.CandidateService;
 import hr.optimus.boardingapp.service.MicroBlinkApiService;
@@ -31,9 +34,8 @@ public class UserController {
 	@RequestMapping( value ="/new", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			method = RequestMethod.POST)
-	public ResponseEntity<Object> addNewCandidate(@RequestBody String payload){
-		
-		CandidateDTO candidateDto = service.addNewCandidate(payload);
+	public ResponseEntity<Object> addNewCandidate(@RequestBody List<Map<String, String>> formData){
+		CandidateDTO candidateDto = service.addNewCandidate(formData);
 		if(null == candidateDto) {
 			return new ResponseEntity<Object>("Error!", HttpStatus.INTERNAL_SERVER_ERROR);   
 		}
@@ -82,9 +84,11 @@ public class UserController {
 
 	@RequestMapping( value ="/collect/response", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
-			method = RequestMethod.POST)
-	public ResponseEntity<Object> collectResponse(@RequestBody String payload){
-		List<CandidateResponseDTO> ret  = service.addCandidateResponses(payload);
+			method = RequestMethod.POST
+			)
+//	public ResponseEntity<Object> collectResponse(@RequestBody String payload){
+	public ResponseEntity<Object> collectResponse(@RequestBody List<Map<String, String>> formData){
+		List<CandidateResponseDTO> ret  = service.addCandidateResponses(formData);
 		if(null == ret) {
 			return new ResponseEntity<Object>("Error!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}

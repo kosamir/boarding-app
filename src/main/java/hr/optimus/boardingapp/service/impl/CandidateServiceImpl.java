@@ -1,7 +1,6 @@
 package hr.optimus.boardingapp.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,69 +36,54 @@ public class CandidateServiceImpl implements CandidateService {
 	private final CandidateResponseMapper responseMapper;
 
 	@Override
-	public CandidateDTO addNewCandidate(String payload) {
-		CandidateDTO dto = toCandidateDTO(payload);
+	public CandidateDTO addNewCandidate(List<Map<String, String>> formData) {
+		CandidateDTO dto = toCandidateDTO(formData);
 		Candidate entity = mapper.toEntity(dto);
 		repository.save(entity);
 		return mapper.toDTO(entity);
 	}
+	
+	
 
-	//payload= SHORT_TEXT_FIELD_25=amir&SHORT_TEXT_FIELD_26=kos&SHORT_TEXT_FIELD_27=koste&DATE_28=2019-10-03&CHOICE_29=Male
-	// REFACTOR!!
-	private CandidateDTO toCandidateDTO(String payload) {
+	private CandidateDTO toCandidateDTO(List<Map<String, String>> formData) {
 		CandidateDTO dto = new CandidateDTO();
-		String[] arr = payload.split("&");
 		
-		String firstName = (arr[0].split("="))[1];
+		String firstName = formData.get(0).get("value");
 		dto.setFirstName(firstName);
 		
-		String lastName = (arr[1].split("="))[1];
+		String lastName = formData.get(1).get("value");
 		dto.setLastName(lastName);
 		
-		String adress = (arr[2].split("="))[1].replace("+", " ");
+		String adress = formData.get(2).get("value").replace("+", " ");
 		dto.setAddress(adress);
 		
-		String date = (arr[3].split("="))[1];
+		String date = formData.get(3).get("value");
 		dto.setDate(date);
 		
-		String gender = (arr[4].split("="))[1].toUpperCase();
+		String gender = formData.get(4).get("value").toUpperCase();
 		dto.setGender(gender);
 		return dto;
 	}
 
 	@Override
-	//payload= templateId=23&formId=30&candiateId=candiateId&CHOICE_31=%20Prolog
-	// REFACTOR!
-	public List<CandidateResponseDTO> addCandidateResponses(String payload) {
-		String[] array = payload.split("&");
-		Long templateId = new Long((array[0].split("="))[1].trim());
-		Long formId = new Long((array[1].split("="))[1].trim());
-		Long candidateId = new Long(array[2].split("=")[1].trim());
+	public List<CandidateResponseDTO> addCandidateResponses(List<Map<String, String>> formData) {
+		Long templateId = new Long(formData.get(0).get("value")); 
+		Long formId = new Long(formData.get(1).get("value"));
+		Long candidateId = new Long(formData.get(2).get("value"));
 		List<CandidateResponse> lst = new ArrayList<CandidateResponse>();
-		for (int i = 3; i < array.length; ++i) {
+		for (int i = 3; i < formData.size(); ++i) {
 			CandidateResponse response = new CandidateResponse();
 			response.setCandidate(repository.getOne(candidateId));
 			response.setTemplate(boardingRepository.getOne(templateId));
 			response.setForm(formRepository.getOne(formId));
-
-			Map<String, String> ret = extractValue(array[i]);
-
-			response.setField(fieldRepository.getOne(new Long(ret.get("fieldId"))));
-			response.setAnswer(ret.get("value"));
+			response.setField(fieldRepository.getOne(new Long(formData.get(i).get("name").substring(formData.get(i).get("name").lastIndexOf("_")+1))));
+			response.setAnswer(formData.get(i).get("value"));
 			lst.add(response);
 		}
 		List<CandidateResponse> ret = responseRepository.saveAll(lst);
 		return toDto(ret);
 	}
-	private Map<String, String> extractValue(String pattern){
-		Map<String, String> ret = new HashMap<String, String>();
-		String [] data = pattern.split("=");
-		ret.put("fieldId",data[0].substring(data[0].lastIndexOf("_")+1));
-		ret.put("value", data[1].replace("+", ""));
-		
-		return ret;
-	}
-
+	
 	@Override
 	public List<CandidateResponseDTO> getCandiatesResponses(Long candidateId) {
 		Candidate candidate = repository.findById(candidateId).orElse(null);
