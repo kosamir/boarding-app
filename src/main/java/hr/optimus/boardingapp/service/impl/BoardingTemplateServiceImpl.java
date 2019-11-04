@@ -131,7 +131,6 @@ public class BoardingTemplateServiceImpl implements BoardingTemplateService {
 	@Override
 	public FieldDTO addField(Long Id, Long formId, FieldDTO dto) {
 		Field entity = fieldMapper.toEntity(dto);
-		System.out.println(entity.toString());
 		BoardingTemplate template = boardingTemplateRepository.findById(Id).orElse(null);
 		if (null == template) {
 			return null;
